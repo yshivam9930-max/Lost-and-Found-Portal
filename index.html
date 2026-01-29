@@ -1,0 +1,1249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Lost & Found Portal • HTML CSS JS</title>
+  <style>
+    :root{
+      --bg0:#070A14;
+      --bg1:#0B1030;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.12);
+      --text:#EAF0FF;
+      --muted:#B7C2E6;
+      --good:#34D399;
+      --bad:#FB7185;
+      --warn:#FBBF24;
+      --accent:#6EE7FF;
+      --accent2:#A78BFA;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --r:18px;
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      color:#111827;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+      overflow-x:hidden;
+    }
+    .wrap{ max-width:1200px; margin:0 auto; padding:18px 14px 28px; }
+
+    header{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; flex-wrap:wrap; margin-bottom:12px;
+    }
+    .brand{ display:flex; align-items:center; gap:12px; min-width:260px; }
+    .logo{
+      width:46px;height:46px;border-radius:14px;
+      background:
+        radial-gradient(18px 18px at 30% 30%, rgba(255,255,255,.28), transparent 65%),
+        linear-gradient(135deg, rgba(110,231,255,.95), rgba(167,139,250,.95));
+      box-shadow: 0 14px 40px rgba(110,231,255,.12);
+      position:relative; overflow:hidden; flex:0 0 auto;
+    }
+    .logo:after{
+      content:""; position:absolute; inset:-2px;
+      background: radial-gradient(240px 80px at 30% 10%, rgba(255,255,255,.26), transparent 60%);
+      transform: rotate(-10deg);
+    }
+    h1{ margin:0; font-size:20px; letter-spacing:.4px; color:#1e3a8a; }
+    .subtitle{ margin:2px 0 0; color:#374151; font-size:12.5px; }
+
+    .top-actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
+    .pill{
+      font-size:12px; color:#374151;
+      border:2px solid rgba(99,102,241,.35);
+      background: rgba(255,255,255,.05);
+      padding:7px 10px; border-radius:999px;
+      display:inline-flex; gap:8px; align-items:center; white-space:nowrap;
+    }
+
+    .btn{
+      border:2px solid rgba(99,102,241,.35);
+      background: rgba(255,255,255,.06);
+      color:#111827;
+      padding:10px 12px;
+      border-radius:14px;
+      cursor:pointer;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+    }
+    .btn:hover{ background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.18); }
+    .btn:active{ transform: translateY(1px); }
+    .btn.primary{
+      border-color: rgba(110,231,255,.32);
+      background: linear-gradient(135deg, #6366f1, #8b5cf6); color:#fff;
+    }
+    .btn.good{
+      border-color: rgba(52,211,153,.30);
+      background: rgba(52,211,153,.10);
+    }
+    .btn.danger{
+      border-color: rgba(251,113,133,.30);
+      background: rgba(251,113,133,.10);
+    }
+    .btn.small{ padding:8px 10px; border-radius:12px; font-size:13px; }
+    .btn.ghost{
+      background: transparent;
+      border-color: transparent;
+    }
+    .btn.ghost:hover{
+      background: rgba(255,255,255,.06);
+      border-color: rgba(255,255,255,.10);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 420px 1fr;
+      gap:12px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(245,247,255,.92));
+      border:2px solid rgba(99,102,241,.35);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .section{ padding:12px 14px; }
+    .divider{ height:1px; background: rgba(255,255,255,.08); }
+
+    .head-row{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:12px 14px;
+    }
+    .head-row b{ font-size:14px; letter-spacing:.2px; }
+    .meta{ color:#374151; font-size:12.5px; }
+
+    /* Form */
+    label{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      font-size:12px;
+      color:#374151;
+    }
+    input, select, textarea{
+      border-radius:14px;
+      border:2px solid #1f2937;
+      background: rgba(255,255,255,.04);
+      color:#111827;
+      padding:10px 11px;
+      outline:none;
+      font: inherit;
+    }
+    textarea{ min-height:96px; resize:vertical; }
+    input:focus, select:focus, textarea:focus{
+      border-color: rgba(110,231,255,.30);
+      background: rgba(255,255,255,.06);
+    }
+    .form{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .row2{ grid-column: 1 / -1; }
+    .filebox{
+      border:2px dashed #1f2937;
+      background: rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:10px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .preview{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+    .thumb{
+      width:62px; height:62px; border-radius:16px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      display:grid; place-items:center;
+      overflow:hidden;
+      flex:0 0 auto;
+    }
+    .thumb img{ width:100%; height:100%; object-fit:cover; }
+    .hint{ color:#374151; font-size:12px; line-height:1.35; }
+    .actions{ display:flex; gap:10px; flex-wrap:wrap; }
+
+    /* Filters */
+    .filters{
+      display:grid;
+      grid-template-columns: 1.3fr 1fr 1fr;
+      gap:10px;
+      padding:12px 14px 14px;
+    }
+    @media (max-width: 980px){
+      .filters{ grid-template-columns: 1fr; }
+    }
+    .search{
+      position:relative;
+    }
+    .search .ic{
+      position:absolute;
+      left:12px; top:50%;
+      transform: translateY(-50%);
+      color:#374151;
+      font-size:14px;
+      pointer-events:none;
+      opacity:.9;
+    }
+    .search input{ padding-left:36px; }
+
+    /* List */
+    .list{ padding:12px 14px 14px; display:flex; flex-direction:column; gap:10px; }
+    .empty{
+      border:1px dashed rgba(255,255,255,.18);
+      background: rgba(255,255,255,.03);
+      border-radius:18px;
+      padding:14px;
+      color:#374151;
+      line-height:1.45;
+    }
+    .item{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      border-radius:18px;
+      padding:12px;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .item .left{
+      width:74px; flex:0 0 auto;
+      display:flex; flex-direction:column; gap:8px; align-items:flex-start;
+    }
+    .avatar{
+      width:74px; height:74px; border-radius:18px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      overflow:hidden;
+      display:grid; place-items:center;
+      font-size:28px;
+    }
+    .avatar img{ width:100%; height:100%; object-fit:cover; }
+    .badge{
+      font-size:12px;
+      border:2px solid #1f2937;
+      background: rgba(255,255,255,.03);
+      padding:6px 9px;
+      border-radius:999px;
+      display:inline-flex;
+      gap:7px;
+      align-items:center;
+      white-space:nowrap;
+      color:#111827;
+    }
+    .badge.good{ border-color: rgba(52,211,153,.30); }
+    .badge.bad{ border-color: rgba(251,113,133,.30); }
+    .badge.warn{ border-color: rgba(251,191,36,.30); }
+    .dot{ width:8px; height:8px; border-radius:99px; background: rgba(255,255,255,.25); }
+    .dot.good{ background: rgba(52,211,153,.90); }
+    .dot.bad{ background: rgba(251,113,133,.90); }
+    .dot.warn{ background: rgba(251,191,36,.90); }
+
+    .item .body{ flex:1; min-width:0; }
+    .title-row{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+    }
+    .title{
+      margin:0; font-weight:900; font-size:15.5px; color:#1e3a8a; letter-spacing:.2px; line-height:1.2;
+      word-break:break-word;
+    }
+    .subrow{
+      margin-top:6px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      color:#374151;
+      font-size:12px;
+    }
+    .chip{
+      border:2px solid #1f2937;
+      background: rgba(255,255,255,.03);
+      padding:5px 8px;
+      border-radius:999px;
+      display:inline-flex;
+      gap:6px;
+      align-items:center;
+    }
+    .desc{
+      margin-top:8px;
+      font-size:12.5px;
+      line-height:1.4;
+      color:#1f2937;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+    .item .right{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      align-items:flex-end;
+      flex:0 0 auto;
+    }
+    .rowbtns{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+
+    /* Modal */
+    .modal-back{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(8px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:60;
+    }
+    .modal-back.show{ display:flex; }
+    .modal{
+      width:min(720px, 100%);
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(20,28,70,.96), rgba(10,14,34,.96));
+      box-shadow: 0 30px 90px rgba(0,0,0,.6);
+      overflow:hidden;
+    }
+    .modal-head{
+      padding:14px 16px;
+      border-bottom:1px solid rgba(255,255,255,.09);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .modal-head .h{ display:flex; flex-direction:column; gap:2px; }
+    .modal-head b{ font-size:15px; }
+    .modal-head span{ color:#374151; font-size:12.5px; }
+    .modal-body{ padding:14px 16px 16px; }
+    .modal-foot{
+      padding:12px 16px;
+      border-top:1px solid rgba(255,255,255,.09);
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+    }
+
+    /* Toast */
+    .toasts{
+      position:fixed;
+      right:14px;
+      bottom:14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      z-index:70;
+      max-width:min(420px, calc(100vw - 28px));
+    }
+    .toast{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(10,14,34,.92);
+      border-radius:18px;
+      padding:12px 12px;
+      box-shadow: 0 18px 70px rgba(0,0,0,.55);
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      animation: pop .18s ease-out;
+    }
+    @keyframes pop{
+      from{ transform: translateY(8px); opacity:0; }
+      to{ transform: translateY(0); opacity:1; }
+    }
+    .toast .ic{
+      width:34px;height:34px;
+      border-radius:12px;
+      display:grid;
+      place-items:center;
+      background: rgba(110,231,255,.14);
+      border:1px solid rgba(110,231,255,.24);
+      flex:0 0 auto;
+    }
+    .toast .txt{ min-width:0; }
+    .toast .txt b{ display:block; font-size:13.5px; }
+    .toast .txt p{ margin:4px 0 0; color:#374151; font-size:12.5px; line-height:1.35; }
+    .toast .x{
+      margin-left:auto;
+      background: transparent;
+      border:0;
+      color:#374151;
+      cursor:pointer;
+      font-size:18px;
+      line-height:1;
+      padding:2px 6px;
+      border-radius:10px;
+    }
+    .toast .x:hover{ background: rgba(255,255,255,.06); }
+
+    .kbd{
+      display:inline-flex; align-items:center; justify-content:center;
+      border:2px solid #1f2937;
+      background: rgba(255,255,255,.04);
+      border-radius:9px;
+      padding:2px 6px;
+      font-size:11px;
+      color:rgba(234,240,255,.86);
+      margin:0 2px;
+      min-width:20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Lost & Found Portal</h1>
+          <div class="subtitle">Report • Search • Claim • Resolve (Offline + LocalStorage)</div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <span class="pill">📌 Open: <b id="openCount">0</b></span>
+        <span class="pill">✅ Resolved: <b id="resolvedCount">0</b></span>
+        <button class="btn small" id="btnExport">⤓ Export</button>
+        <button class="btn small" id="btnImport">⤒ Import</button>
+        <button class="btn small danger" id="btnReset">🗑 Reset</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT: Report form -->
+      <div class="card">
+        <div class="head-row">
+          <div>
+            <b>Report an Item</b>
+            <div class="meta">Fill details and submit. Tip: press <span class="kbd">N</span> for new report.</div>
+          </div>
+          <button class="btn small ghost" id="btnDemo">✨ Demo Data</button>
+        </div>
+        <div class="divider"></div>
+
+        <div class="section">
+          <form id="reportForm" class="form">
+            <label>
+              Type *
+              <select id="fType" required>
+                <option value="lost" selected>Lost</option>
+                <option value="found">Found</option>
+              </select>
+            </label>
+
+            <label>
+              Category *
+              <select id="fCategory" required>
+                <option value="Phone">Phone</option>
+                <option value="Wallet">Wallet</option>
+                <option value="Keys">Keys</option>
+                <option value="ID Card">ID Card</option>
+                <option value="Bag">Bag</option>
+                <option value="Book">Book</option>
+                <option value="Other" selected>Other</option>
+              </select>
+            </label>
+
+            <label class="row2">
+              Item title *
+              <input id="fTitle" required maxlength="60" placeholder="e.g., Black wallet with ID card" />
+            </label>
+
+            <label>
+              Date *
+              <input id="fDate" type="date" required />
+            </label>
+
+            <label>
+              Location *
+              <input id="fLocation" required maxlength="60" placeholder="e.g., School gate / Bus stop" />
+            </label>
+
+            <label class="row2">
+              Description
+              <textarea id="fDesc" maxlength="500" placeholder="Extra details: color, brand, unique marks..."></textarea>
+            </label>
+
+            <label class="row2">
+              Contact *
+              <input id="fContact" required maxlength="80" placeholder="Phone / email / any contact info" />
+            </label>
+
+            <div class="row2 filebox">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+                <div>
+                  <div style="font-weight:800; color:rgba(234,240,255,.92)">Photo (optional)</div>
+                  <div class="hint">Image is saved in browser storage. Keep it small (recommended &lt; 1MB).</div>
+                </div>
+                <div class="actions">
+                  <button class="btn small" type="button" id="btnPick">🖼 Choose</button>
+                  <button class="btn small danger" type="button" id="btnClearImg">✖ Remove</button>
+                </div>
+              </div>
+              <div class="preview">
+                <div class="thumb" id="imgThumb">🖼</div>
+                <div class="hint" id="imgInfo">No image selected</div>
+              </div>
+              <input id="fImage" type="file" accept="image/*" class="sr-only" style="display:none" />
+            </div>
+
+            <input type="hidden" id="fId" />
+
+            <div class="row2 actions">
+              <button class="btn primary" type="submit" id="btnSubmit">➕ Submit</button>
+              <button class="btn" type="button" id="btnClear">🧹 Clear</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- RIGHT: List + filters -->
+      <div class="card">
+        <div class="head-row">
+          <div>
+            <b>Browse Reports</b>
+            <div class="meta">Search & filter. Click “Claim” to contact the reporter.</div>
+          </div>
+          <div class="meta">Shortcut: <span class="kbd">/</span> search</div>
+        </div>
+
+        <div class="filters">
+          <div class="search">
+            <span class="ic">🔎</span>
+            <input id="q" placeholder="Search title, location, description..." />
+          </div>
+
+          <select id="filterType" title="Filter type">
+            <option value="all" selected>All Types</option>
+            <option value="lost">Lost</option>
+            <option value="found">Found</option>
+          </select>
+
+          <select id="filterStatus" title="Filter status">
+            <option value="open" selected>Open</option>
+            <option value="resolved">Resolved</option>
+            <option value="all">All Status</option>
+          </select>
+
+          <select id="filterCategory" class="row2" title="Filter category">
+            <option value="all" selected>All Categories</option>
+          </select>
+
+          <select id="sortBy" class="row2" title="Sort">
+            <option value="new" selected>Sort: Newest</option>
+            <option value="old">Sort: Oldest</option>
+            <option value="az">Sort: A → Z</option>
+          </select>
+
+          <button class="btn" id="btnClearFilters">🧹 Clear Filters</button>
+          <button class="btn good" id="btnOnlyMine">👤 My Reports</button>
+        </div>
+
+        <div class="divider"></div>
+        <div class="section" style="padding-bottom:0">
+          <div class="pill" id="resultsPill">—</div>
+        </div>
+
+        <div class="list" id="list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLAIM MODAL -->
+  <div class="modal-back" id="modalBack" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="h">
+          <b id="modalTitle">Claim Request</b>
+          <span id="modalSub">—</span>
+        </div>
+        <button class="btn small ghost" id="closeModal" aria-label="Close">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="hint" style="margin-bottom:10px">
+          This portal is a demo. Use this message to contact the reporter and verify ownership (unique details).
+        </div>
+
+        <form id="claimForm" class="form">
+          <label class="row2">
+            Your name *
+            <input id="cName" required maxlength="60" placeholder="Your name" />
+          </label>
+          <label class="row2">
+            Your contact *
+            <input id="cContact" required maxlength="80" placeholder="Phone / email" />
+          </label>
+          <label class="row2">
+            Proof / Message *
+            <textarea id="cMsg" required maxlength="500" placeholder="Explain why this item belongs to you, unique details, where you lost it, etc."></textarea>
+          </label>
+          <input type="hidden" id="cItemId" />
+        </form>
+      </div>
+
+      <div class="modal-foot">
+        <button class="btn" id="btnCancelClaim" type="button">Cancel</button>
+        <button class="btn primary" type="submit" form="claimForm">Send Request</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div class="toasts" id="toasts" aria-live="polite" aria-relevant="additions"></div>
+
+<script>
+/***********************
+ * Lost & Found Portal
+ * Single-file (HTML+CSS+JS)
+ * - Add lost/found report + optional image
+ * - Search + filters + sort
+ * - Claim request (saved in item history)
+ * - Mark resolved / delete
+ * - LocalStorage persistence + export/import
+ ************************/
+
+const $ = (q, el=document)=> el.querySelector(q);
+const $$ = (q, el=document)=> Array.from(el.querySelectorAll(q));
+const STORAGE_KEY = "lost_found_portal_v1";
+
+let state = loadState(); // { items:[], settings:{myTag:string} }
+if(!state.settings.myTag) state.settings.myTag = makeId().slice(0,8); // helps "My Reports"
+saveState();
+
+/* Elements */
+const openCount = $("#openCount");
+const resolvedCount = $("#resolvedCount");
+const resultsPill = $("#resultsPill");
+
+const reportForm = $("#reportForm");
+const fType = $("#fType");
+const fCategory = $("#fCategory");
+const fTitle = $("#fTitle");
+const fDate = $("#fDate");
+const fLocation = $("#fLocation");
+const fDesc = $("#fDesc");
+const fContact = $("#fContact");
+const fImage = $("#fImage");
+const fId = $("#fId");
+const btnSubmit = $("#btnSubmit");
+const btnClear = $("#btnClear");
+
+const btnPick = $("#btnPick");
+const btnClearImg = $("#btnClearImg");
+const imgThumb = $("#imgThumb");
+const imgInfo = $("#imgInfo");
+
+const q = $("#q");
+const filterType = $("#filterType");
+const filterStatus = $("#filterStatus");
+const filterCategory = $("#filterCategory");
+const sortBy = $("#sortBy");
+const btnClearFilters = $("#btnClearFilters");
+const btnOnlyMine = $("#btnOnlyMine");
+const listEl = $("#list");
+
+const btnExport = $("#btnExport");
+const btnImport = $("#btnImport");
+const btnReset = $("#btnReset");
+const btnDemo = $("#btnDemo");
+
+/* Modal */
+const modalBack = $("#modalBack");
+const closeModal = $("#closeModal");
+const btnCancelClaim = $("#btnCancelClaim");
+const claimForm = $("#claimForm");
+const modalSub = $("#modalSub");
+const cName = $("#cName");
+const cContact = $("#cContact");
+const cMsg = $("#cMsg");
+const cItemId = $("#cItemId");
+
+/* Local image buffer */
+let imageDataUrl = "";
+
+/* Init defaults */
+fDate.valueAsDate = new Date();
+initCategoryFilter();
+renderAll();
+syncImageUI();
+
+/* Events */
+btnPick.addEventListener("click", ()=> fImage.click());
+btnClearImg.addEventListener("click", ()=> { imageDataUrl=""; fImage.value=""; syncImageUI(); });
+
+fImage.addEventListener("change", async ()=>{
+  const file = fImage.files?.[0];
+  if(!file){ imageDataUrl=""; syncImageUI(); return; }
+
+  // Simple size guard (helps LocalStorage)
+  const maxBytes = 1_200_000; // ~1.2MB
+  if(file.size > maxBytes){
+    toast("Image too large", "Please pick a smaller image (recommended < 1MB).");
+    fImage.value = "";
+    imageDataUrl = "";
+    syncImageUI();
+    return;
+  }
+
+  imageDataUrl = await fileToDataURL(file);
+  syncImageUI();
+});
+
+btnClear.addEventListener("click", ()=> resetForm());
+
+reportForm.addEventListener("submit", (e)=>{
+  e.preventDefault();
+
+  const title = fTitle.value.trim();
+  const location = fLocation.value.trim();
+  const contact = fContact.value.trim();
+  const dateVal = fDate.value;
+
+  if(!title || !location || !contact || !dateVal){
+    toast("Missing fields", "Please fill all required fields (*)");
+    return;
+  }
+
+  const payload = {
+    id: fId.value || makeId(),
+    type: fType.value, // lost/found
+    category: fCategory.value,
+    title,
+    date: dateVal,
+    location,
+    desc: fDesc.value.trim(),
+    contact,
+    image: imageDataUrl || "",
+    status: "open", // open/resolved
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+    createdByTag: state.settings.myTag,
+    claims: [] // claim requests
+  };
+
+  const idx = state.items.findIndex(x=> x.id === payload.id);
+  if(idx >= 0){
+    // keep claims
+    payload.claims = state.items[idx].claims || [];
+    state.items[idx] = payload;
+    toast("Updated ✅", "Report updated successfully.");
+  } else {
+    state.items.push(payload);
+    toast("Submitted ✅", "Report added to portal.");
+  }
+
+  saveState();
+  resetForm();
+  initCategoryFilter();
+  renderAll();
+});
+
+[q, filterType, filterStatus, filterCategory, sortBy].forEach(el=>{
+  el.addEventListener("input", renderList);
+  el.addEventListener("change", renderList);
+});
+
+btnClearFilters.addEventListener("click", ()=>{
+  q.value = "";
+  filterType.value = "all";
+  filterStatus.value = "open";
+  filterCategory.value = "all";
+  sortBy.value = "new";
+  btnOnlyMine.dataset.on = "";
+  btnOnlyMine.textContent = "👤 My Reports";
+  renderList();
+  toast("Filters cleared", "Showing default results.");
+});
+
+btnOnlyMine.addEventListener("click", ()=>{
+  const on = btnOnlyMine.dataset.on === "1";
+  btnOnlyMine.dataset.on = on ? "" : "1";
+  btnOnlyMine.textContent = on ? "👤 My Reports" : "👤 Showing Mine";
+  renderList();
+});
+
+btnExport.addEventListener("click", ()=>{
+  const data = JSON.stringify(state, null, 2);
+  const blob = new Blob([data], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "lost-found-backup.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=> URL.revokeObjectURL(a.href), 1500);
+  toast("Exported ⤓", "Backup downloaded.");
+});
+
+btnImport.addEventListener("click", ()=>{
+  const inp = document.createElement("input");
+  inp.type = "file";
+  inp.accept = "application/json";
+  inp.onchange = async ()=>{
+    const file = inp.files?.[0];
+    if(!file) return;
+    try{
+      const obj = JSON.parse(await file.text());
+      if(!obj || typeof obj !== "object" || !Array.isArray(obj.items)) throw new Error("bad");
+      // keep myTag if missing
+      state = {
+        items: obj.items || [],
+        settings: { myTag: obj.settings?.myTag || state.settings.myTag }
+      };
+      saveState();
+      initCategoryFilter();
+      renderAll();
+      toast("Imported ⤒", "Data restored.");
+    }catch{
+      toast("Import failed", "Invalid backup file.");
+    }
+  };
+  inp.click();
+});
+
+btnReset.addEventListener("click", ()=>{
+  if(!confirm("Reset everything? This will delete all reports.")) return;
+  state = { items: [], settings: { myTag: state.settings.myTag } };
+  saveState();
+  initCategoryFilter();
+  resetForm();
+  renderAll();
+  toast("Reset done", "Portal is now empty.");
+});
+
+btnDemo.addEventListener("click", ()=>{
+  if(state.items.length && !confirm("Add demo data? (It will keep existing items too)")) return;
+  addDemoData();
+  saveState();
+  initCategoryFilter();
+  renderAll();
+  toast("Demo added ✨", "Sample reports created.");
+});
+
+/* Modal events */
+closeModal.addEventListener("click", closeClaimModal);
+btnCancelClaim.addEventListener("click", closeClaimModal);
+modalBack.addEventListener("click", (e)=>{ if(e.target === modalBack) closeClaimModal(); });
+
+claimForm.addEventListener("submit", (e)=>{
+  e.preventDefault();
+  const id = cItemId.value;
+  const item = state.items.find(x=>x.id === id);
+  if(!item) return;
+
+  item.claims = item.claims || [];
+  item.claims.unshift({
+    at: Date.now(),
+    name: cName.value.trim(),
+    contact: cContact.value.trim(),
+    msg: cMsg.value.trim()
+  });
+  item.updatedAt = Date.now();
+
+  saveState();
+  closeClaimModal();
+  renderAll();
+  toast("Request sent ✅", "Claim saved (demo). Contact the reporter to verify.");
+});
+
+/* Keyboard shortcuts */
+window.addEventListener("keydown", (e)=>{
+  if(modalBack.classList.contains("show")){
+    if(e.key === "Escape") closeClaimModal();
+    return;
+  }
+  if(e.key === "/"){
+    e.preventDefault();
+    q.focus();
+  }
+  if(e.key.toLowerCase() === "n"){
+    e.preventDefault();
+    resetForm();
+    fTitle.focus();
+  }
+});
+
+/* Rendering */
+function renderAll(){
+  renderCounts();
+  renderList();
+}
+
+function renderCounts(){
+  const open = state.items.filter(x=>x.status !== "resolved").length;
+  const resolved = state.items.filter(x=>x.status === "resolved").length;
+  openCount.textContent = open;
+  resolvedCount.textContent = resolved;
+}
+
+function renderList(){
+  const query = q.value.trim().toLowerCase();
+  const tFilter = filterType.value;
+  const sFilter = filterStatus.value;
+  const cFilter = filterCategory.value;
+  const mineOnly = btnOnlyMine.dataset.on === "1";
+
+  let items = state.items.slice();
+
+  // Filters
+  if(mineOnly){
+    items = items.filter(x=>x.createdByTag === state.settings.myTag);
+  }
+  if(tFilter !== "all"){
+    items = items.filter(x=>x.type === tFilter);
+  }
+  if(sFilter !== "all"){
+    items = items.filter(x=>x.status === sFilter);
+  }
+  if(cFilter !== "all"){
+    items = items.filter(x=>x.category === cFilter);
+  }
+  if(query){
+    items = items.filter(x=>{
+      const hay = `${x.title} ${x.location} ${x.desc||""} ${x.category}`.toLowerCase();
+      return hay.includes(query);
+    });
+  }
+
+  // Sort
+  if(sortBy.value === "new") items.sort((a,b)=> (b.createdAt||0) - (a.createdAt||0));
+  if(sortBy.value === "old") items.sort((a,b)=> (a.createdAt||0) - (b.createdAt||0));
+  if(sortBy.value === "az") items.sort((a,b)=> (a.title||"").localeCompare(b.title||""));
+
+  resultsPill.textContent = `Showing ${items.length} report(s)` + (mineOnly ? " • Mine" : "");
+
+  listEl.innerHTML = "";
+  if(items.length === 0){
+    listEl.innerHTML = `
+      <div class="empty">
+        <b>No matching reports.</b><br/>
+        Try clearing filters or adding a new report.
+      </div>
+    `;
+    return;
+  }
+
+  items.forEach(x=> listEl.appendChild(renderItemCard(x)));
+}
+
+function renderItemCard(x){
+  const el = document.createElement("div");
+  el.className = "item";
+
+  const typeBadge = x.type === "lost"
+    ? `<span class="badge bad"><span class="dot bad"></span> Lost</span>`
+    : `<span class="badge good"><span class="dot good"></span> Found</span>`;
+
+  const statusBadge = x.status === "resolved"
+    ? `<span class="badge good"><span class="dot good"></span> Resolved</span>`
+    : `<span class="badge warn"><span class="dot warn"></span> Open</span>`;
+
+  const avatar = x.image
+    ? `<img alt="item photo" src="${x.image}">`
+    : `${pickEmoji(x.category)}`;
+
+  const isMine = x.createdByTag === state.settings.myTag;
+  const claimCount = (x.claims || []).length;
+
+  el.innerHTML = `
+    <div class="left">
+      <div class="avatar">${avatar}</div>
+      ${typeBadge}
+      ${statusBadge}
+    </div>
+
+    <div class="body">
+      <div class="title-row">
+        <p class="title">${esc(x.title)}</p>
+        <div class="meta">${fmtDate(x.date)} • ${timeAgo(x.createdAt)}</div>
+      </div>
+
+      <div class="subrow">
+        <span class="chip">🏷 ${esc(x.category)}</span>
+        <span class="chip">📍 ${esc(x.location)}</span>
+        ${isMine ? `<span class="chip">👤 Mine</span>` : ""}
+        ${claimCount ? `<span class="chip">📨 Claims: ${claimCount}</span>` : ""}
+      </div>
+
+      ${x.desc ? `<div class="desc">${esc(x.desc)}</div>` : ""}
+      <div class="subrow" style="margin-top:10px">
+        <span class="chip">📞 Contact: ${esc(maskContact(x.contact))}</span>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="rowbtns">
+        <button class="btn small primary" data-act="claim">🤝 Claim</button>
+        ${isMine ? `<button class="btn small" data-act="edit">✏️ Edit</button>` : ""}
+        ${isMine ? `<button class="btn small good" data-act="toggle">${x.status==="resolved" ? "↩ Reopen" : "✅ Resolve"}</button>` : ""}
+        ${isMine ? `<button class="btn small danger" data-act="del">🗑</button>` : ""}
+      </div>
+    </div>
+  `;
+
+  el.querySelector("[data-act='claim']").addEventListener("click", ()=> openClaimModal(x));
+  const editBtn = el.querySelector("[data-act='edit']");
+  if(editBtn) editBtn.addEventListener("click", ()=> loadIntoForm(x));
+  const toggleBtn = el.querySelector("[data-act='toggle']");
+  if(toggleBtn) toggleBtn.addEventListener("click", ()=> toggleResolved(x.id));
+  const delBtn = el.querySelector("[data-act='del']");
+  if(delBtn) delBtn.addEventListener("click", ()=> deleteItem(x.id));
+
+  return el;
+}
+
+/* Actions */
+function loadIntoForm(x){
+  fId.value = x.id;
+  fType.value = x.type;
+  fCategory.value = x.category;
+  fTitle.value = x.title;
+  fDate.value = x.date;
+  fLocation.value = x.location;
+  fDesc.value = x.desc || "";
+  fContact.value = x.contact;
+  imageDataUrl = x.image || "";
+  fImage.value = "";
+  syncImageUI();
+  btnSubmit.textContent = "💾 Update";
+  toast("Editing", "Update fields and click Update.");
+}
+
+function toggleResolved(id){
+  const x = state.items.find(i=>i.id===id);
+  if(!x) return;
+  x.status = (x.status === "resolved") ? "open" : "resolved";
+  x.updatedAt = Date.now();
+  saveState();
+  renderAll();
+  toast(x.status==="resolved" ? "Resolved ✅" : "Reopened ↩", "Status updated.");
+}
+
+function deleteItem(id){
+  if(!confirm("Delete this report?")) return;
+  state.items = state.items.filter(x=>x.id!==id);
+  saveState();
+  initCategoryFilter();
+  renderAll();
+  toast("Deleted", "Report removed.");
+}
+
+function openClaimModal(item){
+  cItemId.value = item.id;
+  modalSub.textContent = `${item.type.toUpperCase()} • ${item.category} • ${item.title}`;
+  cName.value = "";
+  cContact.value = "";
+  cMsg.value = "";
+  modalBack.classList.add("show");
+  setTimeout(()=> cName.focus(), 30);
+}
+function closeClaimModal(){
+  modalBack.classList.remove("show");
+}
+
+/* Helpers */
+function resetForm(){
+  fId.value = "";
+  fType.value = "lost";
+  fCategory.value = "Other";
+  fTitle.value = "";
+  fDate.valueAsDate = new Date();
+  fLocation.value = "";
+  fDesc.value = "";
+  fContact.value = "";
+  imageDataUrl = "";
+  fImage.value = "";
+  syncImageUI();
+  btnSubmit.textContent = "➕ Submit";
+}
+
+function syncImageUI(){
+  if(imageDataUrl){
+    imgThumb.innerHTML = `<img alt="preview" src="${imageDataUrl}">`;
+    imgInfo.textContent = "Image attached ✅";
+  }else{
+    imgThumb.textContent = "🖼";
+    imgInfo.textContent = "No image selected";
+  }
+}
+
+function initCategoryFilter(){
+  // collect categories from select + existing items
+  const baseCats = Array.from(new Set([
+    ...Array.from(fCategory.options).map(o=>o.value),
+    ...state.items.map(x=>x.category)
+  ])).filter(Boolean).sort((a,b)=>a.localeCompare(b));
+
+  const current = filterCategory.value || "all";
+  filterCategory.innerHTML = `<option value="all">All Categories</option>` +
+    baseCats.map(c=> `<option value="${escAttr(c)}">${esc(c)}</option>`).join("");
+  // restore selection if still exists
+  filterCategory.value = baseCats.includes(current) ? current : "all";
+}
+
+function addDemoData(){
+  const today = new Date();
+  const d1 = toDateInput(addDays(today, -1));
+  const d2 = toDateInput(addDays(today, -3));
+  const d3 = toDateInput(addDays(today, -7));
+
+  state.items.push(
+    {
+      id: makeId(), type:"lost", category:"Wallet",
+      title:"Brown Wallet (with college ID)", date:d2,
+      location:"Near Library", desc:"Has a small scratch on the corner.",
+      contact:"98765-xxxxx", image:"", status:"open",
+      createdAt: Date.now()- 1000*60*60*5, updatedAt: Date.now()-1000*60*60*5,
+      createdByTag: state.settings.myTag, claims: []
+    },
+    {
+      id: makeId(), type:"found", category:"Keys",
+      title:"Keychain with 3 keys", date:d1,
+      location:"Cafeteria", desc:"Silver ring with a blue tag.",
+      contact:"helpdesk@example.com", image:"", status:"open",
+      createdAt: Date.now()- 1000*60*60*14, updatedAt: Date.now()-1000*60*60*14,
+      createdByTag: "other123", claims: []
+    },
+    {
+      id: makeId(), type:"found", category:"Phone",
+      title:"Android phone (black)", date:d3,
+      location:"Bus Stop", desc:"Screen protector cracked on top-right.",
+      contact:"security desk", image:"", status:"resolved",
+      createdAt: Date.now()- 1000*60*60*48, updatedAt: Date.now()-1000*60*60*48,
+      createdByTag: state.settings.myTag, claims: []
+    }
+  );
+}
+
+/* Storage */
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return { items:[], settings:{ myTag:"" } };
+    const obj = JSON.parse(raw);
+    return {
+      items: Array.isArray(obj.items) ? obj.items : [],
+      settings: { myTag: obj.settings?.myTag || "" }
+    };
+  }catch{
+    return { items:[], settings:{ myTag:"" } };
+  }
+}
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+/* Formatting */
+function fmtDate(yyyyMmDd){
+  try{
+    const [y,m,d] = yyyyMmDd.split("-").map(Number);
+    const dt = new Date(y, (m-1), d);
+    return dt.toLocaleDateString(undefined, {year:"numeric", month:"short", day:"numeric"});
+  }catch{
+    return yyyyMmDd || "";
+  }
+}
+function timeAgo(ts){
+  if(!ts) return "";
+  const s = Math.floor((Date.now()-ts)/1000);
+  if(s < 60) return "just now";
+  const m = Math.floor(s/60);
+  if(m < 60) return m+"m ago";
+  const h = Math.floor(m/60);
+  if(h < 24) return h+"h ago";
+  const d = Math.floor(h/24);
+  return d+"d ago";
+}
+function maskContact(c){
+  c = String(c||"").trim();
+  if(c.includes("@")) return c; // email: show as is
+  if(c.length <= 4) return c;
+  // mask middle
+  const keep = 2;
+  const start = c.slice(0, keep);
+  const end = c.slice(-2);
+  return start + "•".repeat(Math.min(8, Math.max(2, c.length-keep-2))) + end;
+}
+function pickEmoji(cat){
+  const map = {
+    "Phone":"📱",
+    "Wallet":"👛",
+    "Keys":"🗝️",
+    "ID Card":"🪪",
+    "Bag":"🎒",
+    "Book":"📚",
+    "Other":"📦"
+  };
+  return map[cat] || "📦";
+}
+
+/* Utilities */
+function makeId(){
+  return Math.random().toString(16).slice(2) + "-" + Date.now().toString(16);
+}
+function esc(s){
+  return String(s ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+function escAttr(s){
+  return String(s ?? "").replaceAll('"',"&quot;");
+}
+function addDays(date, n){
+  const d = new Date(date);
+  d.setDate(d.getDate()+n);
+  return d;
+}
+function toDateInput(date){
+  const y = date.getFullYear();
+  const m = String(date.getMonth()+1).padStart(2,"0");
+  const d = String(date.getDate()).padStart(2,"0");
+  return `${y}-${m}-${d}`;
+}
+function fileToDataURL(file){
+  return new Promise((resolve, reject)=>{
+    const fr = new FileReader();
+    fr.onload = ()=> resolve(fr.result);
+    fr.onerror = reject;
+    fr.readAsDataURL(file);
+  });
+}
+
+/* Toasts */
+function toast(title, message){
+  const host = $("#toasts");
+  const t = document.createElement("div");
+  t.className = "toast";
+  t.innerHTML = `
+    <div class="ic">📌</div>
+    <div class="txt">
+      <b>${esc(title)}</b>
+      <p>${esc(message||"")}</p>
+    </div>
+    <button class="x" aria-label="Close">×</button>
+  `;
+  t.querySelector(".x").addEventListener("click", ()=> t.remove());
+  host.appendChild(t);
+  setTimeout(()=> { if(t.isConnected) t.remove(); }, 4500);
+}
+</script>
+</body>
+</html>
